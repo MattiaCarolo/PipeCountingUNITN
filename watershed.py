@@ -22,12 +22,14 @@ ap.add_argument("-i","--image", required=True, help="path to image")
 args = vars(ap.parse_args())
 
 #image loader
-image = cv2.imread(args["image"])
-shifted = cv2.pyrMeanShiftFiltering(image,21,51)
-#cv2.imshow("Input",shifted)
+image = cv2.imread(args["image"],0)
+print(image)
+equalizer = cv2.equalizeHist(image)
+#shifted = cv2.pyrMeanShiftFiltering(equalizer,21,51)
+cv2.imshow("Input",equalizer)
 
-gray = cv2.cvtColor(shifted, cv2.COLOR_BGR2GRAY)
-thresh = cv2.threshold(gray,0,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+#gray = cv2.cvtColor(shifted, cv2.COLOR_BGR2GRAY)
+thresh = cv2.threshold(equalizer,0,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
 #cv2.imshow("Thresh", thresh)
 #cv2.waitKey(0)
@@ -57,7 +59,7 @@ for label in np.unique(labels):
         continue
     
     # draw label region on the mask
-    mask = np.zeros(gray.shape, dtype="uint8")
+    mask = np.zeros(image.shape, dtype="uint8")
     mask[labels == label] = 255
 
     #detect countour on mask and take the largest
