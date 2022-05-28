@@ -5,7 +5,7 @@ from cv2 import matchShapes
 import numpy as np
 
 """img used for testing are img15 (88 square pipes) and img16 (35 round pipes)"""
-img1 = cv.imread('img16.jpg',0)  #img7.jpg 48 pipe. img15 88 square pipe
+img1 = cv.imread('./data/img16.jpg',0)  #img7.jpg 48 pipe. img15 88 square pipe
 img1 = cv.equalizeHist(img1)
 img1 = cv.blur(img1, (3,3))
 
