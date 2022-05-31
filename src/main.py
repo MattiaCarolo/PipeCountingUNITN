@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import cv2 as cv
+from skimage import measure
 import imageio
 
 CIRCLE_THRESH = 0.2
@@ -28,9 +29,9 @@ def binarize(image):
     bilateral = cv.bilateralFilter(image,5,150,150)
     #gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     #image = cv.equalizeHist(gray)
-    #image = cv.blur(image, (3,3))
-    #ret, thresh2 = cv.threshold(image, 127, 255,0) 
-    canny = cv.Canny(bilateral,200,450,apertureSize=3) # canny on the binary of the img1
+    image = cv.blur(image, (3,3))
+    ret, thresh2 = cv.threshold(image, 127, 255,0) 
+    canny = cv.Canny(bilateral,100,225,apertureSize=3) # canny on the binary of the img1
     return canny
 
 def binarizeOneChannel(image):
@@ -108,10 +109,14 @@ image_bin_0 = binarizeOneChannel(image_0)
 Circles = list()
 Rects = list()
 images = []
-contourss0,hierarchy = cv.findContours(image_bin_0,2,1)
-
+contourss0,hierarchy = cv.findContours(image_bin_0,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
+i = 0
 for cnt in contourss0:#
-    print(len(cnt))
+    (x,y),radius = cv.minEnclosingCircle(cnt)
+    center = (int(x),int(y))
+    radius = int(radius)
+    if radius < 5.0:
+        continue
     circ = cv.matchShapes(fcircle,cnt,1,0.0)
     rect = cv.matchShapes(fsquare,cnt,1,0.0)
 
@@ -125,7 +130,9 @@ for cnt in contourss0:#
         shape = {"type":"Rectangle", "centroid":(cnt_x,cnt_y)}
         #print("rectangle",rect)
         Rects.append(shape)
-    images.append(image)
+    #i += 1
+    #cv.imwrite("./GIFimages/" + str(i) + ".jpg", image)
+    #images.append(imageio.imread("../GIFimages/" + str(i) + ".jpg"))
     
 
 print("rect count: ",len(Rects))
@@ -144,7 +151,7 @@ cv.imshow("source",image_0)
 cv.imshow("thresh",image_bin_0)
 #cv.imshow("result",image)
 cv.imshow("houghes",image2)
-imageio.mimsave('./movie.gif', images)
+#imageio.mimsave('./movie.gif', images)
 
 cv.waitKey()
 cv.destroyAllWindows() 
