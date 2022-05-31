@@ -24,7 +24,7 @@ thresh = cv2.threshold(gray,0,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
 #cv2.imshow("Thresh", thresh)
 
-cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+cnts = cv2.findContours(thresh.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 
 #loop over countours
@@ -34,7 +34,7 @@ for(i,c) in enumerate(cnts):
 		cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
     cv2.drawContours(image, [c], -1, (0,255,0), 2)
 
-cv2.imshow("IMage", image)
+cv2.imshow("Image", image)
 
 cv2.waitKey(5000)
 cv2.destroyAllWindows()

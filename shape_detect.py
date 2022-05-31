@@ -2,9 +2,12 @@ import cv2
 import numpy as np
 
 # Load image
-image = cv2.imread('img6.jpg', 0)
-image = cv2.equalizeHist(image)
-#image = cv2.Canny(image,500,600,apertureSize=3)
+image = cv2.imread('./Dataset/pipe2.jpg')
+
+
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+image = cv2.equalizeHist(gray)
+image = cv2.Canny(image,500,600,apertureSize=3)
 #image = cv2.dilate(image,(2,2),iterations=10)
 # Set our filtering parameters
 # Initialize parameter setting using cv2.SimpleBlobDetector
@@ -48,6 +51,8 @@ cv2.putText(blobs, text, (20, 550),
 			cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 100, 255), 2)
 print(text)
 # Show blobs
+
+cv2.imshow("Filtered image", image)
 cv2.imshow("Filtering Circular Blobs Only", blobs)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

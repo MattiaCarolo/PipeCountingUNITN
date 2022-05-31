@@ -5,13 +5,14 @@ from cv2 import matchShapes
 import numpy as np
 
 """img used for testing are img15 (88 square pipes) and img16 (35 round pipes)"""
-img1 = cv.imread('./data/img16.jpg',0)  #img7.jpg 48 pipe. img15 88 square pipe
+img1 = cv.imread('./data/pipe2.jpg',0)  #img7.jpg 48 pipe. img15 88 square pipe
 img1 = cv.equalizeHist(img1)
 img1 = cv.blur(img1, (3,3))
 
 #creation of the circle and square to use as a reference for the matching
 canvas = np.zeros((300, 300, 1), dtype="uint8")
 canvas2 = np.zeros((600, 600, 1), dtype="uint8")
+
 circle = cv.circle(canvas,(150,150),100,(200,0,0),10)
 rect = cv.rectangle(canvas2,(10,10),(590,590),(200,0,0),9)
 
