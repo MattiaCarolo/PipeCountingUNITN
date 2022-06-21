@@ -1,6 +1,6 @@
 import cv2
 
-raw_image = cv2.imread('./data/img16.jpg',0) 
+raw_image = cv2.imread('./data/pipe2.jpg',0) 
 cv2.imshow('Original Image', raw_image)
 cv2.waitKey(0)
 
