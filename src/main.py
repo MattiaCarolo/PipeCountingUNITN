@@ -1,12 +1,12 @@
 # import the necessary package
-from cv2 import bilateralFilter
-import matplotlib.pyplot as plt
-
 import numpy as np
 import argparse
 import cv2 as cv
 from homography import homography
 from utils import *
+import jsonpickle
+
+
 CIRCLE_THRESH = 0.2
 RECT_THRESH = 0.1
 
@@ -24,8 +24,7 @@ fcircle = CircleFilter()
 fsquare = SquareFilter()
 image_0 = cv.imread(args["image"],0)
 
-
-image_1 = homography(image_0)
+image, image_1 = homography(image,image_0)
 
 
 image_bin_0 = binarizeOneChannel(image_1)
@@ -45,12 +44,12 @@ for cnt in contourss0:#
     rect = cv.matchShapes(fsquare,cnt,1,0.0)
 
     if circ < 0.075: #precision of the matching
-        cnt_x,cnt_y = findCentroid(cnt, image_1, "Circle")
+        cnt_x,cnt_y = findCentroid(cnt, image, "Circle")
         shape = {"type":"Circle", "centroid":(cnt_x,cnt_y)}
         #print("cerchio", circ)
         Circles.append(shape)
     if rect < 0.082:    #0.082 img15
-        cnt_x,cnt_y = findCentroid(cnt,image_1, "Rectangle")
+        cnt_x,cnt_y = findCentroid(cnt,image, "Rectangle")
         shape = {"type":"Rectangle", "centroid":(cnt_x,cnt_y)}
         #print("rectangle",rect)
         Rects.append(shape)
@@ -60,6 +59,10 @@ for cnt in contourss0:#
     
 
 print("rect count: ",len(Rects))
+
+json_dic = {"Rectangles":jsonpickle.encode(Rects, unpicklable=False), "Circles":jsonpickle.encode(Circles, unpicklable=False)}
+
+print(json_dic)
 print("circle count: ",len(Circles))
 """
 circles = cv.HoughCircles(image_bin_0,cv.HOUGH_GRADIENT,1,20,
@@ -74,7 +77,7 @@ for i in circles[0,:]:
 cv.imshow("source",image_0)
 cv.imshow("thresh",image_bin_0)
 #cv.imshow("result",image)
-cv.imshow("houghes",image_1)
+cv.imshow("houghes",image)
 #imageio.mimsave('./movie.gif', images)
 
 cv.waitKey()
