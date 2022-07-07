@@ -4,7 +4,6 @@ import argparse
 import cv2 as cv
 from homography import homography
 from utils import *
-import jsonpickle
 
 
 CIRCLE_THRESH = 0.2
@@ -48,6 +47,7 @@ for cnt in contourss0:#
         shape = {"type":"Circle", "centroid":(cnt_x,cnt_y)}
         #print("cerchio", circ)
         Circles.append(shape)
+        continue
     if rect < 0.082:    #0.082 img15
         cnt_x,cnt_y = findCentroid(cnt,image, "Rectangle")
         shape = {"type":"Rectangle", "centroid":(cnt_x,cnt_y)}
