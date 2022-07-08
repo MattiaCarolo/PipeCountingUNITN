@@ -1,8 +1,9 @@
 # PipeCountingUNITN
 
-https://pyimagesearch.com/2016/02/08/opencv-shape-detection/
+To launch the main algorithm write 
 
+``` bash
+python3 main.py
+```
 
-moments of image = https://en.wikipedia.org/wiki/Image_moment
-
-applied bilinear filter
+The main files correlated are `utils.py` and `homography.py`. The remaining files are obsolete or used to test specific functions
