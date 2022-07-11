@@ -10,11 +10,14 @@ def mouse_handler(event, x, y, flags, data) :
         cv2.imshow("Image", data['im'])
         if len(data['points']) < 4 :
             data['points'].append([x,y])
+    '''
     if event == cv2.EVENT_MBUTTONDOWN:
-        data['points'].append((0,0))
         data['points'].append((0,data['im'].shape[1]))
         data['points'].append((data['im'].shape[0],data['im'].shape[1]))
         data['points'].append((data['im'].shape[0],0))
+        data['points'].append((0,0))
+    
+    '''        
     
 
 

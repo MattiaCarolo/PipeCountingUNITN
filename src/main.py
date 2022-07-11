@@ -4,6 +4,7 @@ import argparse
 import cv2 as cv
 from homography import homography
 from utils import *
+import jsonpickle
 
 
 CIRCLE_THRESH = 0.2
@@ -23,7 +24,11 @@ fcircle = CircleFilter()
 fsquare = SquareFilter()
 image_0 = cv.imread(args["image"],0)
 
-image, image_1 = homography(image,image_0)
+try:
+    image, image_1 = homography(image,image_0)
+except:
+    print("Couldn't do homography, going onwards without it")
+    image_1 = image_0
 
 
 image_bin_0 = binarizeOneChannel(image_1)
@@ -42,17 +47,27 @@ for cnt in contourss0:#
     circ = cv.matchShapes(fcircle,cnt,1,0.0)
     rect = cv.matchShapes(fsquare,cnt,1,0.0)
 
+    '''
+    For debug purposes only
+    '''
+    if(rect < 0.5):
+        print("Rectangle confidence = ", rect)
+    if(circ < 0.5):
+        print("Circle confidence = ", circ)
+
+    if rect < 0.0072:    #0.082 img15
+        cnt_x,cnt_y = findCentroid(cnt,image, "Rectangle")
+        shape = {"type":"Rectangle", "centroid":(cnt_x,cnt_y)}
+        #print("rectangle",rect)
+        Rects.append(shape)
+        continue
+
     if circ < 0.075: #precision of the matching
         cnt_x,cnt_y = findCentroid(cnt, image, "Circle")
         shape = {"type":"Circle", "centroid":(cnt_x,cnt_y)}
         #print("cerchio", circ)
         Circles.append(shape)
         continue
-    if rect < 0.082:    #0.082 img15
-        cnt_x,cnt_y = findCentroid(cnt,image, "Rectangle")
-        shape = {"type":"Rectangle", "centroid":(cnt_x,cnt_y)}
-        #print("rectangle",rect)
-        Rects.append(shape)
     #i += 1
     #cv.imwrite("./GIFimages/" + str(i) + ".jpg", image)
     #images.append(imageio.imread("../GIFimages/" + str(i) + ".jpg"))
