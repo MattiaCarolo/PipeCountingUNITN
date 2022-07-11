@@ -15,3 +15,7 @@ This algorithm permits two type of usages basing on the photos provided. At the 
 
 As output we will get in the terminal the count of circular and rectangular pipe inside the image plus a json list that encodes shape type and centroid location. 
 In the resulting image the countour of the different shapes will be highlighted together with the relative centroid
+
+## Disclaimer
+
+For the countour matching and the relative filters the thresholds implemented are user made by taking a batch of images and making a semi average of the confidence of the recognized images. We know that this may not be considered as the best approach but we tried to focus on using only CV approaches without resorting to ML or other approaches that require a learning or an intehensive computation from the hardware
